@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { animate } from "animejs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,7 @@ export default function SimpleTCPSimulator() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSimulating, setIsSimulating] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
+  const [initialized, setInitialized] = useState(false);
   
   // Animation refs
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -57,21 +58,7 @@ export default function SimpleTCPSimulator() {
 
   // Reset simulation
   const resetSimulation = () => {
-    setClientState('CLOSED');
-    setServerState('CLOSED');
-    setConnectionStatus('idle');
-    setCurrentStep(0);
-    setIsSimulating(false);
-    setLogs([]);
-    addLog("Simulation reset. Ready to start TCP 3-Way Handshake.");
-    
-    // Reset animations
-    if (packetRef.current) {
-      animate(packetRef.current, { opacity: 0, translateX: 0, duration: 0 });
-    }
-    if (connectionLineRef.current) {
-      animate(connectionLineRef.current, { opacity: 0, duration: 0 });
-    }
+    initializeSimulation();
   };
 
   // Simulate packet loss
@@ -244,10 +231,30 @@ export default function SimpleTCPSimulator() {
     setIsSimulating(false);
   };
 
-  // Initialize on mount
-  useEffect(() => {
-    resetSimulation();
-  }, []);
+  // Initialize manually instead of useEffect
+  const initializeSimulation = () => {
+    setClientState('CLOSED');
+    setServerState('CLOSED');
+    setConnectionStatus('idle');
+    setCurrentStep(0);
+    setIsSimulating(false);
+    setLogs([]);
+    addLog("Simulation ready. Click Start to begin TCP 3-Way Handshake.");
+    
+    // Reset animations
+    if (packetRef.current) {
+      animate(packetRef.current, { opacity: 0, translateX: 0, duration: 0 });
+    }
+    if (connectionLineRef.current) {
+      animate(connectionLineRef.current, { opacity: 0, duration: 0 });
+    }
+    setInitialized(true);
+  };
+
+  // Initialize once when component loads
+  if (!initialized) {
+    setTimeout(() => initializeSimulation(), 0);
+  }
 
   return (
     <div className="min-h-screen bg-background p-6 space-y-6">
