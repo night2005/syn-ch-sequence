@@ -1,7 +1,7 @@
-import TCPHandshakeSimulator from "@/components/TCPHandshakeSimulator";
+import SimpleTCPSimulator from "@/components/SimpleTCPSimulator";
 
 const Index = () => {
-  return <TCPHandshakeSimulator />;
+  return <SimpleTCPSimulator />;
 };
 
 export default Index;
