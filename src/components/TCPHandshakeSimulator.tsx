@@ -46,7 +46,7 @@ export default function TCPHandshakeSimulator() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [simulationMode, setSimulationMode] = useState<SimulationMode>('auto');
   const [packetLoss, setPacketLoss] = useState<PacketLoss>('none');
-  const [animationSpeed, setAnimationSpeed] = useState([1000]);
+  const [animationSpeed, setAnimationSpeed] = useState([2000]);
   const [randomizeISN, setRandomizeISN] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const [isSimulating, setIsSimulating] = useState(false);
@@ -522,9 +522,9 @@ export default function TCPHandshakeSimulator() {
                 <Slider
                   value={animationSpeed}
                   onValueChange={setAnimationSpeed}
-                  max={3000}
-                  min={500}
-                  step={250}
+                  max={5000}
+                  min={800}
+                  step={200}
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground mt-1">
