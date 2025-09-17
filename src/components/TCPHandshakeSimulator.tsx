@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-const anime = require("animejs");
+import { animate } from "animejs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -102,10 +102,10 @@ export default function TCPHandshakeSimulator() {
     
     // Reset animations
     if (packetRef.current) {
-      anime.set(packetRef.current, { opacity: 0, translateX: 0 });
+      animate(packetRef.current, { opacity: 0, translateX: 0, duration: 0 });
     }
     if (connectionLineRef.current) {
-      anime.set(connectionLineRef.current, { opacity: 0 });
+      animate(connectionLineRef.current, { opacity: 0, duration: 0 });
     }
   };
 
@@ -152,22 +152,21 @@ export default function TCPHandshakeSimulator() {
       const startX = animation.direction === 'client-to-server' ? 0 : canvasRect.width - 200;
       const endX = animation.direction === 'client-to-server' ? canvasRect.width - 200 : 0;
       
-      anime.set(packet, {
+      animate(packet, {
         opacity: 1,
         translateX: startX,
-        translateY: canvasRect.height / 2 - 20
+        translateY: canvasRect.height / 2 - 20,
+        duration: 0
       });
 
       // Animate packet movement
-      anime({
-        targets: packet,
+      animate(packet, {
         translateX: endX,
         duration: animationSpeed[0],
         easing: 'easeInOutQuad',
         complete: () => {
           // Fade out packet
-          anime({
-            targets: packet,
+          animate(packet, {
             opacity: 0,
             duration: 300,
             complete: () => resolve(true)
@@ -217,8 +216,7 @@ export default function TCPHandshakeSimulator() {
           
           // Show connection established animation
           if (connectionLineRef.current) {
-            anime({
-              targets: connectionLineRef.current,
+            animate(connectionLineRef.current, {
               opacity: 1,
               duration: 500,
               easing: 'easeInOutQuad'
